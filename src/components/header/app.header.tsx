@@ -17,6 +17,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Avatar, Container } from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -59,6 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppHeader() {
+    const router = useRouter()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
@@ -87,23 +90,22 @@ export default function AppHeader() {
     const renderMenu = (
         <Menu
             anchorEl={anchorEl}
-            // anchorOrigin={{
-            //     vertical: 'top',
-            //     horizontal: 'right',
-            // }}
             id={menuId}
             keepMounted
-            // transformOrigin={{
-            //     vertical: 'top',
-            //     horizontal: 'right',
-            // }}
             open={isMenuOpen}
             onClose={handleMenuClose}
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem>
+                <Link href={"/profile"}
+                    style={{
+                        color: 'unset',
+                        textDecoration: 'unset'
+                    }}
+                >Profile</Link>
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
         </Menu>
     );
 
@@ -158,7 +160,9 @@ export default function AppHeader() {
             </MenuItem>
         </Menu>
     );
-
+    const handleRedirectHome = () => {
+        router.push('/')
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static"
@@ -171,7 +175,8 @@ export default function AppHeader() {
                             variant="h6"
                             noWrap
                             component="div"
-                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                            sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'pointer' }}
+                            onClick={() => handleRedirectHome()}
                         >
                             SoundCloud
                         </Typography>
@@ -190,27 +195,20 @@ export default function AppHeader() {
                                 display: { xs: 'none', md: 'flex' },
                                 gap: '20px',
                                 alignItems: 'center',
-                                cursor: 'pointer'
-
+                                cursor: 'pointer',
+                                "> a": {
+                                    color: 'unset',
+                                    textDecoration: 'unset'
+                                }
                             }}>
 
-                            <span>Playlist</span>
-                            <span>Like</span>
-                            <span>Upload</span>
+                            <Link href={"/playlist"}>Playlist</Link>
+                            <Link href={"/like"}>Like</Link>
+                            <Link href={"/upload"}>Upload</Link>
                             <Avatar
                                 onClick={handleProfileMenuOpen}
                             >Tr</Avatar>
-                            {/* <IconButton
-                                size="large"
-                                edge="end"
-                                aria-label="account of current user"
-                                aria-controls={menuId}
-                                aria-haspopup="true"
-                                onClick={handleProfileMenuOpen}
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton> */}
+
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
